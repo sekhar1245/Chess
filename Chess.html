@@ -1,0 +1,208 @@
+<html> 
+<head> 
+
+<style>
+     
+    table{
+        border-collapse: collapse;
+		width: 100px;
+		height: 100px;
+       
+    }
+    tr,td{        
+        
+    border: 2px solid black;
+    height: 100px;
+    min-height: 100px;
+    min-width: 100px;
+    width: 100px;
+        
+    }
+    td{
+        text-align: center;
+		font-size:30px;
+	
+		
+    }
+  
+    
+    
+</style>
+<script type="text/javascript">
+window.onload = function ()
+{
+board=document.getElementById("Chess_board");
+create_chess_board(board);
+}
+function create_chess_board(board)
+{
+chess_rows=["a","b","c","d","e","f","g","h"];
+for(var i=0;i<8;i++){
+    if(i%2==0){
+row=board.insertRow();
+row.id=chess_rows[i];
+//console.log("Even rows  " +row.id);
+add_even_Cells_Row(row);
+    }
+	else{
+     row=board.insertRow();
+	 row.id=chess_rows[i];
+	
+add_odd_Cells_Row(row);   
+        
+    }
+  
+}
+    
+arrange_board(board); 
+
+}//create chess board
+function add_odd_Cells_Row(row){
+for(var i=0;i<8;i++){
+cell=row.insertCell();
+cell.id=row.id+i;
+    if(i%2==0){
+        cell.style.backgroundColor="7c7c7c";
+		    }
+	cell.draggable="true";
+	cell.className="droptarget";
+    row.appendChild(cell);
+
+}//for
+} //add_odd_cells_Row
+  function add_even_Cells_Row(row){
+      
+      for(var i=0;i<8;i++){
+	cell=row.insertCell();
+	  cell.id=row.id+i;	  
+    if(i%2!=0){
+        cell.style.backgroundColor="7c7c7c";        
+			}
+	cell.draggable="true";
+	cell.className="droptarget";
+	
+    row.appendChild(cell);
+
+}//for
+      
+  }//add_even_cells  
+  
+ function arrange_board(){
+//arranging white and black pawns
+var white_pawn_row="b";
+var black_pawn_row="g";
+for(var i=0;i<8;i++){
+document.getElementById(white_pawn_row+i).innerHTML="&#9817";
+document.getElementById(black_pawn_row+i).innerHTML="&#9823;";
+}
+
+//adding firts row elements rook,knight,bishoop,queen,king
+var white_starting_position="a";
+var black_starting_position="h";
+//adding rook's both sides
+document.getElementById(white_starting_position+0).innerHTML="&#9814";
+document.getElementById(white_starting_position+7).innerHTML="&#9814";
+
+document.getElementById(black_starting_position+0).innerHTML="&#9820";
+document.getElementById(black_starting_position+7).innerHTML="&#9820";
+//adding knights both sides
+
+document.getElementById(white_starting_position+1).innerHTML="&#9816";
+document.getElementById(white_starting_position+6).innerHTML="&#9816";
+
+document.getElementById(black_starting_position+1).innerHTML="&#9822";
+document.getElementById(black_starting_position+6).innerHTML="&#9822";
+
+//adding bishop's both sides
+document.getElementById(white_starting_position+2).innerHTML="&#9815";
+document.getElementById(white_starting_position+5).innerHTML="&#9815";
+
+document.getElementById(black_starting_position+2).innerHTML="&#9821";
+document.getElementById(black_starting_position+5).innerHTML="&#9821";
+
+//adding queen's both sides
+
+document.getElementById(white_starting_position+4).innerHTML="&#9813";
+
+document.getElementById(black_starting_position+4).innerHTML="&#9819";
+
+//adding king's both sides
+
+document.getElementById(white_starting_position+3).innerHTML="&#9812";
+
+document.getElementById(black_starting_position+3).innerHTML="&#9818";
+
+} //arrange board
+  
+ document.addEventListener("dragstart", function(event) {
+    Pan=document.getElementById(event.target.id).innerHTML;
+	Start_Position=document.getElementById(event.target.id).id;
+	if(check_rules_chess(Pan)){
+	event.dataTransfer.effectAllowed = 'copy';
+    event.dataTransfer.setData("Element_Move", event.target.id);
+   
+   }else console.log("Invalid move");
+   
+});
+
+
+document.addEventListener("dragover", function(event) {
+    event.preventDefault();
+	//var element_code = document.getElementById(event.target.id).innerHTML;
+	//console.log("checking log value at drag over event"+event.target.id);
+	 if(Start_Position==event.target.id)
+	 document.getElementById(event.target.id).innerHTML="";
+	
+	});
+	
+
+
+document.addEventListener("drop", function(event) {
+    event.preventDefault();
+	
+    if ( event.target.className == "droptarget" ) {
+        var data = event.dataTransfer.getData("Element_Move");
+		//console.log("From drop end....!"+event.target.id);
+		Ending_position= document.getElementById(event.target.id).id;
+		//console.log("Pan is ended in this position "+Ending_position);
+		 document.getElementById(event.target.id).innerHTML=Pan;
+		//console.log(event.target.id);
+    }
+	
+	
+	
+});
+
+
+
+function check_rules_chess(Pan){
+
+if(Pan.charCodeAt(0)==9817 || Pan.charCodeAt(0)==9823){
+console.log("It is a Pan,Should move frorwd direction only");
+console.log("The pan postion is --->"+Start_Position + " Next postion it should be moved to Start_Position+1"+(Start_Position+1));
+}
+else if(Pan.charCodeAt(0)==9814 || Pan.charCodeAt(0)==9820)
+console.log("Rooks starting position here");
+else
+console.log("thinking about other options here");
+
+
+return true;
+
+
+}
+	
+
+
+ 
+    
+</script>
+
+</head>
+
+<body>
+<table id="Chess_board">
+</table> 
+
+</body> 
+</html>
