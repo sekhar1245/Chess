@@ -20,7 +20,7 @@
     }
     td{
         text-align: center;
-		font-size:30px;
+		font-size:80px;
 	
 		
     }
@@ -92,80 +92,61 @@ cell.id=row.id+i;
 var white_pawn_row="b";
 var black_pawn_row="g";
 for(var i=0;i<8;i++){
-    
-    var div=document.createElement("div");
-    div.innerHTML="&#9817";
-    div.className="pawn";
-    div.id="pawn_White"+i;
-    document.getElementById(white_pawn_row+i).appendChild(div);  
-    var div1=document.createElement("div");
-    div1.innerHTML="&#9823";
-    div1.className="pawn";
-    div1.id="pawn_Black"+i;
-    document.getElementById(black_pawn_row+i).appendChild(div1);
+document.getElementById(white_pawn_row+i).innerHTML="&#9817";
+document.getElementById(black_pawn_row+i).innerHTML="&#9823;";
 }
 
 //adding firts row elements rook,knight,bishoop,queen,king
 var white_starting_position="a";
 var black_starting_position="h";
+//adding rook's both sides
+document.getElementById(white_starting_position+0).innerHTML="&#9814";
+document.getElementById(white_starting_position+7).innerHTML="&#9814";
 
-//adding rook's both sides     
-document.getElementById(white_starting_position+0).appendChild(create_coin_level_div(9814,(white_starting_position+0)));
-document.getElementById(white_starting_position+7).appendChild(create_coin_level_div(9814,(white_starting_position+7)));
-
-document.getElementById(black_starting_position+0).appendChild(create_coin_level_div(9820,(black_starting_position+0)));
-document.getElementById(black_starting_position+7).appendChild(create_coin_level_div(9820,(black_starting_position+7)));
-
-															   
+document.getElementById(black_starting_position+0).innerHTML="&#9820";
+document.getElementById(black_starting_position+7).innerHTML="&#9820";
 //adding knights both sides
 
-document.getElementById(white_starting_position+1).appendChild(create_coin_level_div(9816,(white_starting_position+1)));
-document.getElementById(white_starting_position+6).appendChild(create_coin_level_div(9816,(white_starting_position+6)));
-document.getElementById(black_starting_position+1).appendChild(create_coin_level_div(9822,(black_starting_position+1)));
-document.getElementById(black_starting_position+6).appendChild(create_coin_level_div(9822,(black_starting_position+6)));
+document.getElementById(white_starting_position+1).innerHTML="&#9816";
+document.getElementById(white_starting_position+6).innerHTML="&#9816";
+
+document.getElementById(black_starting_position+1).innerHTML="&#9822";
+document.getElementById(black_starting_position+6).innerHTML="&#9822";
 
 //adding bishop's both sides
-															   
-document.getElementById(white_starting_position+2).appendChild(create_coin_level_div(9815,(white_starting_position+2)));
-document.getElementById(white_starting_position+5).appendChild(create_coin_level_div(9815,(white_starting_position+5)));
+document.getElementById(white_starting_position+2).innerHTML="&#9815";
+document.getElementById(white_starting_position+5).innerHTML="&#9815";
 
-document.getElementById(black_starting_position+2).appendChild(create_coin_level_div(9821,(black_starting_position+2)));
-document.getElementById(black_starting_position+5).appendChild(create_coin_level_div(9821,(black_starting_position+5)));
+document.getElementById(black_starting_position+2).innerHTML="&#9821";
+document.getElementById(black_starting_position+5).innerHTML="&#9821";
 
 //adding queen's both sides
 
-document.getElementById(white_starting_position+4).appendChild(create_coin_level_div(9813,(white_starting_position+4)));
+document.getElementById(white_starting_position+4).innerHTML="&#9813";
 
-document.getElementById(black_starting_position+4).appendChild(create_coin_level_div(9819,(black_starting_position+4)));
+document.getElementById(black_starting_position+4).innerHTML="&#9819";
 
 //adding king's both sides
 
-document.getElementById(white_starting_position+3).appendChild(create_coin_level_div(9812,(white_starting_position+3)));
+document.getElementById(white_starting_position+3).innerHTML="&#9812";
 
-document.getElementById(black_starting_position+3).appendChild(create_coin_level_div(9818,(black_starting_position+3)));
+document.getElementById(black_starting_position+3).innerHTML="&#9818";
+
 } //arrange board
   
  document.addEventListener("dragstart", function(event) {
-     pawn=document.getElementById(event.target.id).innerHTMl;
-	Start_Position=document.getElementById(event.target.id).id;
-	 coin1=document.getElementById(event.target.id);
-	 console.log(" checking type of coin we are moving"+coin1.id+coin1.className);
-	if(check_rules_chess(pawn)){
+    Pan=document.getElementById(event.target.id).innerHTML;
 	event.dataTransfer.effectAllowed = 'copy';
     event.dataTransfer.setData("Element_Move", event.target.id);
-   
-   }else console.log("Invalid move");
-   
+	   
 });
 
 
 document.addEventListener("dragover", function(event) {
     event.preventDefault();
-	
-	 if(Start_Position==event.target.id)
-	 document.getElementById(event.target.id).innerHTML="";
-	
-	});
+	if(event.dataTransfer.getData("Element_Move")==document.getElementById(event.target.id).id)		 
+			document.getElementById(event.target.id).innerHTML="";		 
+		});
 	
 
 
@@ -174,11 +155,11 @@ document.addEventListener("drop", function(event) {
 	
     if ( event.target.className == "droptarget" ) {
         var data = event.dataTransfer.getData("Element_Move");
-		//console.log("From drop end....!"+event.target.id);
-		Ending_position= document.getElementById(event.target.id).id;
-		//console.log("pawn is ended in this position "+Ending_position);
-		 document.getElementById(event.target.id).innerHTML=coin;
+if(check_rules(Pan,event.dataTransfer.getData("Element_Move"),document.getElementById(event.target.id).id)){
+		document.getElementById(event.target.id).innerHTML=Pan;
 		//console.log(event.target.id);
+		 }else
+			 alert("Invalid move");
     }
 	
 	
@@ -186,97 +167,29 @@ document.addEventListener("drop", function(event) {
 });
 
 
-
-function check_rules_chess(pawn){
-
-if(pawn.charCodeAt(0)==9817 || pawn.charCodeAt(0)==9823){
-console.log("It is a pawn,Should move frorwd direction only");
-console.log("The pawn postion is --->"+Start_Position + " Next postion it should be moved to Start_Position+1"+(Start_Position+1));
-}
-else if(pawn.charCodeAt(0)==9814 || pawn.charCodeAt(0)==9820)
-console.log("Rooks starting position here");
-else
-console.log("thinking about other options here");
-
-
-return true;
-
-
-}
-    
-    
-    function create_coin_level_div(coincode,position){
-        
-        var div=document.createElement("div");
-		switch(coincode){
-                
-			case 9814:
-				div.innerHTML="&#9814";
-				div.className="div_rook";
-				div.id="div_rook_"+position;
-				break;
-				
-			case 9820:
-				div.innerHTML="&#9820";
-				div.className="div_rook";
-				div.id="div_rook_"+position;
-				break;
-				
-			case 9816:
-				div.innerHTML="&#9816";
-				div.className="div_knight";
-				div.id="div_knight_"+position;
-				break;
-			case 9822:
-				div.innerHTML="&#9822";
-				div.className="div_knight";
-				div.id="div_knight_"+position;
-				break;
-			case 9815:
-				div.innerHTML="&#9815";
-				div.className="div_bishop";
-				div.id="div_bishop_"+position;
-				break;
-			case 9821:
-				div.innerHTML="&#9821";
-				div.className="div_bishop";
-				div.id="div_bishop_"+position;
-				break;
-			case 9813:
-				div.innerHTML="&#9813";
-				div.className="div_queen";
-				div.id="div_queen_"+position;
-				break;
-			case 9819:
-				div.innerHTML="&#9819";
-				div.className="div_queen";
-				div.id="div_queen_"+position;
-				break;
-			case 9812:
-				div.innerHTML="&#9812";
-				div.className="div_king";
-				div.id="div_king_"+position;
-				break;
-			case 9818:
-				div.innerHTML="&#9818";
-				div.className="div_king";
-				div.id="div_king_"+position;
-				break;
-				
-				
-				
-				
-				
-				
-        }
-        
-        return div;
-        
-        
-        
-        
-        
-    }
+	function check_rules(Pan,Start_Position,End_Position){
+		var st_pos=Start_Position.charCodeAt(0);		
+		if(Pan.charCodeAt(0)==9817 || Pan.charCodeAt(0)==9823){				
+			st_pos=st_pos+1;
+			st_pos=String.fromCharCode(st_pos).concat(Start_Position.charAt(1));
+			if(st_pos==End_Position)			
+			return true;
+			else {
+				revert_back_pan(Pan,Start_Position);
+			return false;
+			}	
+					
+		}
+		else {
+				revert_back_pan(Pan,Start_Position);
+			return false;
+			}	
+		
+		
+	}
+	function revert_back_pan(Pan,Start_Position){
+		document.getElementById(Start_Position).innerHTML=Pan.charAt(0);
+	}
 	
 
 
