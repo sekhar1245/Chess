@@ -134,7 +134,59 @@ document.getElementById(black_starting_position+3).innerHTML="&#9818";
 
 } //arrange board
   
- document.addEventListener("dragstart", function(event) {
+ 
+	
+	
+	document.addEventListener("mousedown",function(event){
+		
+		
+		var possible_moves=next_pan_move(document.getElementById(event.target.id).innerHTML,event.target.id);
+		var pans_original_colors=[];		
+		for(var i=1;i<possible_moves.length;i++){
+			 pans_original_colors[i]=document.getElementById(possible_moves[i]).style.backgroundColor;
+			document.getElementById(possible_moves[i]).style.backgroundColor="yellow";
+		
+		
+		}	
+		
+		document.addEventListener("mouseup",function(event){
+			
+			for(var i=1;i<possible_moves.length;i++){
+			 //pans_original_colors[i]=document.getElementById(possible_moves[i]).style.backgroundColor;
+			document.getElementById(possible_moves[i]).style.backgroundColor=pans_original_colors[i];
+		
+		
+		}
+			
+			
+			
+			
+		})
+	})
+	
+	/*document.addEventListener("mouseup",function(event){		
+		
+		var possible_moves=next_pan_move(document.getElementById(event.target.id).innerHTML,event.target.id);
+		var pans_original_colors=event.dataTransfer.getData("Element_original_colors");
+		
+		
+		for(var i=1;i<possible_moves.length;i++){
+document.getElementById(possible_moves[i]).style.backgroundColor=pans_original_colors[i];
+			
+			//document.getElementById(possible_moves[i]).style.backgroundColor="yellow";
+		
+		
+		}
+		//event.dataTransfer.effectAllowed = 'copy';
+		//event.dataTransfer.setData("Element_original_colors", pans_original_colors);
+	})*/
+	
+	
+	
+	
+	
+	 
+	document.addEventListener("dragstart", function(event) {
     Pan=document.getElementById(event.target.id).innerHTML;
 	event.dataTransfer.effectAllowed = 'copy';
     event.dataTransfer.setData("Element_Move", event.target.id);
@@ -154,7 +206,7 @@ document.addEventListener("drop", function(event) {
     event.preventDefault();
 	
     if ( event.target.className == "droptarget" ) {
-        var data = event.dataTransfer.getData("Element_Move");
+        //var data = event.dataTransfer.getData("Element_Move");
 if(check_rules(Pan,event.dataTransfer.getData("Element_Move"),document.getElementById(event.target.id).id)){
 		document.getElementById(event.target.id).innerHTML=Pan;
 		//console.log(event.target.id);
@@ -255,10 +307,15 @@ if(check_rules(Pan,event.dataTransfer.getData("Element_Move"),document.getElemen
 						while(pan_steps>0){			
 							counter++;
 							next_moves[counter]=pan_position+counter;
+							console.log("---ASCII values ---->"+next_moves[counter])
 							pan_steps--;  }
 							for(var i=0;i<next_moves.length;i++){
                        next_moves[i]=String.fromCharCode(next_moves[i]).concat(Start_Position.charAt(1));
-															}
+															
+							console.log("---rook can move ---->"+next_moves[i])
+							
+							
+							}
 				break;
 				
 				

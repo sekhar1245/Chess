@@ -1,3 +1,15 @@
+Skip to content
+Personal Open source Business Explore
+Sign upSign inPricingBlogSupport
+This repository
+Search
+ Watch 1  Star 0  Fork 0 sekhar1245/Chess
+ Code  Issues 0  Pull requests 0  Pulse  Graphs
+Branch: Board-Layout-v… Find file Copy pathChess/Chess.html
+c2056b5  2 days ago
+@sekhar1245 sekhar1245 updated pan movings
+1 contributor
+RawBlameHistory     317 lines (220 sloc)  6.88 KB
 <html> 
 <head> 
 
@@ -20,7 +32,7 @@
     }
     td{
         text-align: center;
-		font-size:80px;
+		font-size:60px;
 	
 		
     }
@@ -55,7 +67,6 @@ add_odd_Cells_Row(row);
 }
     
 arrange_board(board); 
-
 }//create chess board
 function add_odd_Cells_Row(row){
 for(var i=0;i<8;i++){
@@ -67,7 +78,6 @@ cell.id=row.id+i;
 	cell.draggable="true";
 	cell.className="droptarget";
     row.appendChild(cell);
-
 }//for
 } //add_odd_cells_Row
   function add_even_Cells_Row(row){
@@ -82,7 +92,6 @@ cell.id=row.id+i;
 	cell.className="droptarget";
 	
     row.appendChild(cell);
-
 }//for
       
   }//add_even_cells  
@@ -95,43 +104,30 @@ for(var i=0;i<8;i++){
 document.getElementById(white_pawn_row+i).innerHTML="&#9817";
 document.getElementById(black_pawn_row+i).innerHTML="&#9823;";
 }
-
 //adding firts row elements rook,knight,bishoop,queen,king
 var white_starting_position="a";
 var black_starting_position="h";
 //adding rook's both sides
 document.getElementById(white_starting_position+0).innerHTML="&#9814";
 document.getElementById(white_starting_position+7).innerHTML="&#9814";
-
 document.getElementById(black_starting_position+0).innerHTML="&#9820";
 document.getElementById(black_starting_position+7).innerHTML="&#9820";
 //adding knights both sides
-
 document.getElementById(white_starting_position+1).innerHTML="&#9816";
 document.getElementById(white_starting_position+6).innerHTML="&#9816";
-
 document.getElementById(black_starting_position+1).innerHTML="&#9822";
 document.getElementById(black_starting_position+6).innerHTML="&#9822";
-
 //adding bishop's both sides
 document.getElementById(white_starting_position+2).innerHTML="&#9815";
 document.getElementById(white_starting_position+5).innerHTML="&#9815";
-
 document.getElementById(black_starting_position+2).innerHTML="&#9821";
 document.getElementById(black_starting_position+5).innerHTML="&#9821";
-
 //adding queen's both sides
-
 document.getElementById(white_starting_position+4).innerHTML="&#9813";
-
 document.getElementById(black_starting_position+4).innerHTML="&#9819";
-
 //adding king's both sides
-
 document.getElementById(white_starting_position+3).innerHTML="&#9812";
-
 document.getElementById(black_starting_position+3).innerHTML="&#9818";
-
 } //arrange board
   
  document.addEventListener("dragstart", function(event) {
@@ -140,16 +136,12 @@ document.getElementById(black_starting_position+3).innerHTML="&#9818";
     event.dataTransfer.setData("Element_Move", event.target.id);
 	   
 });
-
-
 document.addEventListener("dragover", function(event) {
     event.preventDefault();
 	if(event.dataTransfer.getData("Element_Move")==document.getElementById(event.target.id).id)		 
 			document.getElementById(event.target.id).innerHTML="";		 
 		});
 	
-
-
 document.addEventListener("drop", function(event) {
     event.preventDefault();
 	
@@ -165,34 +157,139 @@ if(check_rules(Pan,event.dataTransfer.getData("Element_Move"),document.getElemen
 	
 	
 });
-
-
 	function check_rules(Pan,Start_Position,End_Position){
-		var st_pos=Start_Position.charCodeAt(0);		
-		if(Pan.charCodeAt(0)==9817 || Pan.charCodeAt(0)==9823){				
-			st_pos=st_pos+1;
-			st_pos=String.fromCharCode(st_pos).concat(Start_Position.charAt(1));
-			if(st_pos==End_Position)			
-			return true;
-			else {
-				revert_back_pan(Pan,Start_Position);
-			return false;
-			}	
-					
+		
+		var valid_move=false;
+		var next_positions=next_pan_move(Pan,Start_Position);
+		
+		for(var i=0;i<next_positions.length;i++){
+			if(next_positions[i]==End_Position)
+				valid_move=true;			
+			
 		}
-		else {
-				revert_back_pan(Pan,Start_Position);
+		if(valid_move)
+			return true;
+		else{
+			revert_move(Pan,Start_Position);			
 			return false;
-			}	
+		}
 		
 		
 	}
-	function revert_back_pan(Pan,Start_Position){
+	
+	function revert_move(Pan,Start_Position){
 		document.getElementById(Start_Position).innerHTML=Pan.charAt(0);
 	}
 	
-
-
+	/*function next_pan_move(Pan,Start_Position){
+		
+		var pan_position=Start_Position.charCodeAt(0);
+		var next_moves=[];
+		var pan_steps=0;
+		var counter=0;
+		if(Pan.charCodeAt(0)==9817 || Pan.charCodeAt(0)==9823){	
+			if(pan_position==98 ||pan_position==103){
+			
+				pan_steps=2;
+				console.log("Pan steps"+pan_steps);
+			}	
+			else{
+				pan_steps=1;
+			}
+			
+		
+		while(pan_steps>0){			
+			counter++;
+			next_moves[counter]=pan_position+counter;
+			pan_steps--;	
+			
+		}
+			for(var i=0;i<next_moves.length;i++){
+			next_moves[i]=String.fromCharCode(next_moves[i]).concat(Start_Position.charAt(1));
+				console.log(next_moves[i]);
+				
+			}
+		return next_moves;
+		
+	}}*/
+	
+	function next_pan_move(Pan,Start_Position){
+		
+		var pan_position=Start_Position.charCodeAt(0);
+		var next_moves=[];
+		var pan_steps=0;
+		var counter=0;
+		switch(Pan.charCodeAt(0)){
+				
+			case 9817:	if(pan_position==98)pan_steps=2;
+						else pan_steps=1;
+						while(pan_steps>0){			
+							counter++;
+							next_moves[counter]=pan_position+counter;
+							pan_steps--;  }
+						for(var i=0;i<next_moves.length;i++){
+                       next_moves[i]=String.fromCharCode(next_moves[i]).concat(Start_Position.charAt(1));
+															}
+						break;
+			case 9823:	if(pan_position==103)pan_steps=-2;
+						else pan_steps=-1;
+						while(pan_steps<0){			
+							counter++;
+							next_moves[counter]=pan_position-counter;
+							pan_steps++;  }
+						for(var i=0;i<next_moves.length;i++){
+                       next_moves[i]=String.fromCharCode(next_moves[i]).concat(Start_Position.charAt(1));
+															}
+						break;
+			case 9814:	pan_steps=7;
+						while(pan_steps>0){			
+							counter++;
+							next_moves[counter]=pan_position+counter;
+							pan_steps--;  }
+							for(var i=0;i<next_moves.length;i++){
+                       next_moves[i]=String.fromCharCode(next_moves[i]).concat(Start_Position.charAt(1));
+															}
+				break;
+				
+				
+				
+				
+				
+				
+				default : console.log("Moves are not yet defined");
+				break;			
+				
+				
+				
+		}
+		
+		
+		
+		return next_moves;
+		
+		
+	}
+	
+	
+	function rook_moves(Pan,Start_Position){
+		
+		
+		
+	}
+	function knight_moves(Pan,Start_Position){
+		
+		
+	}
+	function bishoop_moves(Pan,Start_Position){
+		
+	}
+	function queen_moves(Pan,Start_Position){
+		
+	}
+	function king_moves(Pan,Start_Position){
+		
+	}
+	
  
     
 </script>
@@ -205,3 +302,5 @@ if(check_rules(Pan,event.dataTransfer.getData("Element_Move"),document.getElemen
 
 </body> 
 </html>
+Contact GitHub API Training Shop Blog About
+© 2016 GitHub, Inc. Terms Privacy Security Status Help
